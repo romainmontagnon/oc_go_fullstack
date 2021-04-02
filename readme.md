@@ -197,4 +197,41 @@ app.get('/api/stuff/:id', (req, res, next) => {
 
 #### Modification
 
+Pour modifier une DB on utilise la route `'PUT'` en utilsant la méthode `updateOne(arg1, arg2)`.
+
+- `arg1` : sera l'`id` de l'élément que l'on souhaite modifier.
+- `arg2` : sera en deux partis `(arg21, arg22)`.
+  - `arg21` : sera le schéma a utiliser
+  - `arg22` : sera le même `id` que `arg1` afin de dire que c'est bien lui et non un nouveau qu'on modifie.
+
+```javascript
+app.put('/api/stuff/:id', (req, res, next) => {
+    Thing.updateOne({ _id: req.params.id }, { ...req.body, _id: req.params.id })
+        .then(() => res.status(200).json({ message: 'Objet modifié !'}))
+        .catch(error => res.status(400).json({ error }));
+});
+```
+
 #### Suppression
+
+Pour supprimer un élément on va utiliser la route `'DELETE'` suivant les mêmes modalités aue précédement.
+
+```javascript
+app.delete('/api/stuff/:id', (req, res, next) => {
+    Thing.deleteOne({ _id: req.params.id })
+        .then(() => res.status(200).json({ message: 'Objet supprimé !'}))
+        .catch(error => res.status(400).json({ error }));
+});
+```
+
+### En résumé
+
+Notre __CRUD__ est complet.
+
+- configurer une base de donnée __MongoDB__ et la connecter à __Express__
+- utilsation de __Mongoose__ pour créer un modèle afin de facilité les opérations de la base de donnée.
+- implémentation dans __Express__ des routes __CRUD__ qui exploitent notre modèle de données __Mongoose__ afin de rendre notre application dynamiaue.
+
+## Optimiser la structure back-end
+
+On va scinder le fichier `app.js` en séparant les routes ('GET', 'POST', etc) des controleurs (logique métier) afin d'allèger le code et en facilité la maintenance.
