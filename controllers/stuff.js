@@ -15,15 +15,26 @@ exports.getAllThings = (req, res, next) => {
 };
 
 exports.createThing = (req, res, next) => {
-  const thingObject = JSON.parse(req.body.thing);
-  delete thingObject._id;
   const thing = new Thing({
-    ...thingObject,
-    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    title: req.body.title,
+    description: req.body.description,
+    imageUrl: req.body.imageUrl,
+    price: req.body.price,
+    userId: req.body.userId
   });
-  thing.save()
-    .then(() => res.status(201).json({ message: 'Objet enregistré !'}))
-    .catch(error => res.status(400).json({ error }));
+  thing.save().then(
+    () => {
+      res.status(201).json({
+        message: 'Post saved successfully!'
+      });
+    }
+  ).catch(
+    (error) => {
+      res.status(400).json({
+        error: error
+      });
+    }
+  );
 };
 
 exports.getOneThing = (req, res, next) => {
