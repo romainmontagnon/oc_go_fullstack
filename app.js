@@ -1,8 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const path = require('path');
 
 const stuffRoutes = require('./routes/stuff');
+const userRoutes = require('./routes/user');
+const { join } = require('path');
 
 mongoose.connect('mongodb+srv://bender_rodriguez:Fry3000@cluster0.ejgiy.mongodb.net/test?authSource=admin&replicaSet=atlas-6bscut-shard-0&readPreference=primary&appname=MongoDB%20Compass&ssl=true',
   { useNewUrlParser: true,
@@ -20,6 +23,7 @@ app.use((req, res, next) => {
 });
 
 app.use(bodyParser.json());
-app.use('/api/stuff', stuffRoutes);
+app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/api/auth', userRoutes);
 
 module.exports = app;
